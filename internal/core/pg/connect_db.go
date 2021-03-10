@@ -3,8 +3,6 @@ package pg
 import (
 	"database/sql"
 	"fmt"
-	"log"
-	"net/http"
 
 	_ "github.com/lib/pq"
 )
@@ -33,15 +31,4 @@ func InitDB() {
 	}
 
 	fmt.Println("Successfully connected!")
-}
-func homePage(w http.ResponseWriter, r *http.Request) {
-}
-func handle() {
-	http.HandleFunc("/", homePage)
-	log.Fatal(http.ListenAndServe(":8001", nil))
-}
-
-func main() {
-	InitDB()
-	handle()
 }
