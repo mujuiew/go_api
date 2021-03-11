@@ -1,0 +1,46 @@
+version: "3.4"
+
+networks:
+  shared-network:
+    driver: bridge
+services:
+    pgAdmin:
+        restart: always
+        image: dpage/pgadmin4
+        ports:
+            - "8081:80"
+        environment:
+            PGADMIN_DEFAULT_EMAIL: user@domain.local
+            PGADMIN_DEFAULT_PASSWORD: SuperSecret
+        depends_on:
+          - "postgres"
+
+    postgres:
+      networks:
+        - shared-network
+      hostname: "host"
+      ipc: host
+      pid: "host"
+      restart: always
+      image: postgres
+      container_name: "postgres_container"
+      ports:
+          - "5432:5432"
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: payment
+      volumes:
+          - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    app:
+      networks:
+        - shared-network
+      hostname: "host"
+      ipc: host
+      pid: "host"
+      build: 
+          context: .
+          dockerfile: Dockerfile
+      ports:
+        - "8083:8010"
