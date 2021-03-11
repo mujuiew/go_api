@@ -1,12 +1,5 @@
 package rest
 
-// Rate ...
-type Rate struct {
-	Rate          string  `json:"rate"`
-	InterestRate  float64 `json:"interest_rate"`
-	PromotionName string  `json:"promotion_name"`
-}
-
 // Output ...
 type Output struct {
 	Promotionname string `json:"promotion name"`
@@ -20,6 +13,6 @@ type Promotion struct {
 
 // Input ...
 type Input struct {
-	CalDate            string  `json:"cal_date"`
-	AccountNumber      int64   `json:"account_number"`
+	CalDate       string `json:"cal_date"`
+	AccountNumber int64  `json:"account_number"`
 }

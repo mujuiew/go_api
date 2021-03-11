@@ -1,15 +1,18 @@
 package main
 
 import (
-	"fmt"
+	"net/http"
 
+	"github.com/go_api/internal/core/login"
 	"github.com/go_api/internal/core/rest"
+	"github.com/gorilla/mux"
 )
 
 func main() {
-	// router.POST("/login", login.Login)
-	// log.Fatal(router.Run(":8020"))
+	r := mux.NewRouter()
+	rest.InitDB()
+	r.HandleFunc("/login", login.Login).Methods("POST")
+	r.HandleFunc("/getPromotion", rest.HomePage).Methods("POST")
 
-	fmt.Println("hello")
-	rest.Handle()
+	http.ListenAndServe(":8010", r)
 }

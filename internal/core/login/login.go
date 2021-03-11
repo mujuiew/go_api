@@ -1,20 +1,14 @@
 package login
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/gin-gonic/gin"
 )
-
-type User struct {
-	ID       uint64 `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Phone    string `json:"phone"`
-}
 
 var user = User{
 	ID:       1,
@@ -23,23 +17,35 @@ var user = User{
 	Phone:    "49123454322", //this is a random number
 }
 
-func Login(c *gin.Context) {
-	var u User
-	if err := c.ShouldBindJSON(&u); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided")
+func Login(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var data Input
+	err := json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		fmt.Fprintln(w, err.Error())
 		return
 	}
 	//compare the user from the request, with the one we defined:
-	if user.Username != u.Username || user.Password != u.Password {
-		c.JSON(http.StatusUnauthorized, "Please provide valid login details")
+	if user.Username != data.UserName || user.Password != data.PassWord {
+		fmt.Fprintln(w, "Please provide valid login details")
 		return
 	}
 	token, err := CreateToken(user.ID)
 	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		fmt.Fprintln(w, err.Error())
 		return
 	}
-	c.JSON(http.StatusOK, token)
+	outData := Output{
+		UserName: data.UserName,
+		Token:    token,
+	}
+	js, err := json.Marshal(outData)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(js)
 }
 func CreateToken(userId uint64) (string, error) {
 	var err error
