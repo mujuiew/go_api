@@ -1,0 +1,153 @@
+{
+	"info": {
+		"_postman_id": "9f8fb4e5-9260-4ead-88e6-1d72843bdb4d",
+		"name": "api_test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get_jwt",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var expectedHttpStatus = 200;",
+							"var maxNumberOfTries = 7;",
+							"var sleepBetweenTries = 5000; //ms",
+							"",
+							"if (!pm.environment.get(\"tries\")) {",
+							"    pm.environment.set(\"tries\", 1);",
+							"}",
+							"",
+							"if ((pm.response.code != expectedHttpStatus) && (pm.environment.get(\"tries\") < maxNumberOfTries)) {",
+							"    var tries = parseInt(pm.environment.get(\"tries\"), 10);",
+							"    pm.environment.set(\"tries\", tries + 1);",
+							"    setTimeout(function() {}, sleepBetweenTries);",
+							"    postman.setNextRequest(request.name);",
+							" } else {",
+							"    pm.environment.unset(\"tries\");",
+							"",
+							"    console.log(\"+++++request+++++\");",
+							"    console.log(request);",
+							"    console.log(\"+++++response+++++\");",
+							"    console.log(responseBody);",
+							"    ",
+							"    pm.test(\"[http] Status code is 200\", function () {",
+							"        pm.response.to.have.status(200);",
+							"    });",
+							"    ",
+							"    var jsonData = pm.response.json();",
+							"    ",
+							"    pm.test(\"Username is username\", function () {",
+							"        pm.expect(jsonData.username).to.eql(\"username\");",
+							"    }); ",
+							" ",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"username\",\n    \"password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{ip}}:8010/login",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "8010",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find_PromotionName",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var expectedHttpStatus = 200;",
+							"var maxNumberOfTries = 7;",
+							"var sleepBetweenTries = 5000; //ms",
+							"",
+							"if (!pm.environment.get(\"tries\")) {",
+							"    pm.environment.set(\"tries\", 1);",
+							"}",
+							"",
+							"if ((pm.response.code != expectedHttpStatus) && (pm.environment.get(\"tries\") < maxNumberOfTries)) {",
+							"    var tries = parseInt(pm.environment.get(\"tries\"), 10);",
+							"    pm.environment.set(\"tries\", tries + 1);",
+							"    setTimeout(function() {}, sleepBetweenTries);",
+							"    postman.setNextRequest(request.name);",
+							" } else {",
+							"    pm.environment.unset(\"tries\");",
+							"",
+							"    console.log(\"+++++request+++++\");",
+							"    console.log(request);",
+							"    console.log(\"+++++response+++++\");",
+							"    console.log(responseBody);",
+							"    ",
+							"    pm.test(\"[http] Status code is 200\", function () {",
+							"        pm.response.to.have.status(200);",
+							"    });",
+							"    ",
+							"    var jsonData = pm.response.json();",
+							"    ",
+							"    pm.test(\"Account Number is 100023\", function () {",
+							"        pm.expect(jsonData.account_number).to.eql(100023);",
+							"    }); ",
+							"",
+							"    pm.test(\"Promotion Name is Promo1\", function () {",
+							"        pm.expect(jsonData.promotion_name).to.eql(\"Promo1\");",
+							"    });  ",
+							" ",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cal_date\":\"2020-01-01\",\n    \"account_number\":100023\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{ip}}:8010/getPromotion",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "8010",
+					"path": [
+						"getPromotion"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

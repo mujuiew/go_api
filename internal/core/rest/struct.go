@@ -2,8 +2,8 @@ package rest
 
 // Output ...
 type Output struct {
-	Promotionname string `json:"promotion name"`
-	Number        int64  `json:"account number"`
+	Promotionname string `json:"promotion_name"`
+	Number        int64  `json:"account_number"`
 }
 
 // Promotion ...

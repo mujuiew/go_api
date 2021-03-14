@@ -5,13 +5,13 @@ networks:
     driver: bridge
 services:
     pgAdmin:
-        restart: always
-        image: dpage/pgadmin4
-        ports:
-            - "8081:80"
-        env_file: .env
-        depends_on:
-          - "postgres"
+      restart: always
+      image: dpage/pgadmin4
+      ports:
+          - "8081:80"
+      env_file: .env
+      depends_on:
+        - "postgres"
 
     postgres:
       # networks:
@@ -44,3 +44,5 @@ services:
           dockerfile: Dockerfile
       ports:
         - "8010:8080"
+      depends_on:
+        - "postgres"
