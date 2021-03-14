@@ -14,8 +14,9 @@ services:
           - "postgres"
 
     postgres:
-      networks:
-        - shared-network
+      # networks:
+      #   - shared-network
+      network_mode: bridge
       hostname: "host"
       ipc: host
       pid: "host"
@@ -26,19 +27,20 @@ services:
           - "5503:5432"
       env_file: .env
       volumes:
-          - sql/pg/init.sql:/docker-entrypoint-initdb.d/init.sql
+          - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
     app:
-      networks:
-        - shared-network
+      network_mode: bridge
+        # - shared-network
+        # - bridge
       # UTS (hostname): เป็นการ isolate the hostname และ NIS (Network Information Service) name ตามแต่ละ namespaces
-      hostname: "host"
+      hostname: "127.0.0.1"
       # inter-process communication (ipc): เป็นการ isolate SystemV IPC และ POSIX Message Queues ตามแต่ละ namespaces
       ipc: host
       # process id (pid): เป็นการ virtualized pid โดยในแต่ละ namespace จะมี pid ซ้ำกันได้ โดย pid ในแต่ละ namespace จะถูก map เป็น pid ของ host อีกที
-      pid: "host"
+      pid: "127.0.0.1"
       build: 
           context: .
           dockerfile: Dockerfile
       ports:
-        - "8083:8010"
+        - "8010:8080"

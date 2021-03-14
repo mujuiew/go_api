@@ -17,8 +17,8 @@ CREATE TABLE public.Promotion
 (
     "promotion_name" character varying(30) COLLATE pg_catalog."default" NOT NULL,
     "description" character varying(50) COLLATE pg_catalog."default",
-    start_date date COLLATE pg_catalog."default",
-    end_date date COLLATE pg_catalog."default" ,
+    start_date date ,
+    end_date date ,
     CONSTRAINT "Promotion_pkey" PRIMARY KEY ("promotion_name")
 )
 

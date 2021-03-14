@@ -11,9 +11,9 @@ import (
 func main() {
 	r := mux.NewRouter()
 	rest.InitDB()
-	r.HandleFunc("/getHello", login.GetHello).Methods("GET")
+	r.HandleFunc("/geteHllo", login.GetHello).Methods("GET")
 	r.HandleFunc("/login", login.Login).Methods("POST")
 	r.HandleFunc("/getPromotion", rest.HomePage).Methods("POST")
 
-	http.ListenAndServe(":8010", r)
+	http.ListenAndServe(":8080", r)
 }

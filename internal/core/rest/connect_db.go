@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	host     = "localhost"
-	port     = 5432
+	host     = "127.0.0.1"
+	port     = 5503
 	user     = "postgres"
 	password = "postgres"
 	dbname   = "payment"
@@ -22,37 +22,40 @@ var db *sql.DB
 // var rate Rate
 
 func InitDB() {
+	var err error
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
-	db, err := sql.Open("postgres", psqlInfo)
+	db, err = sql.Open("postgres", psqlInfo)
 	if err != nil {
 		log.Panic(err)
 	}
 
+	log.Println("\n============== Error db.Ping ====================", db)
 	if err = db.Ping(); err != nil {
-		log.Panic(err)
+		log.Println("\n============== Error db.Ping ====================")
+		log.Panic(err.Error())
 	}
 
 	fmt.Println("Successfully connected! DB")
 }
 
 // FineProname ...
-func FineProname(date string) string {
+func FineProname(date string) (string, error) {
 	var pro Promotion
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-	db, _ := sql.Open("postgres", psqlInfo)
+	db, _ = sql.Open("postgres", psqlInfo)
 
-	rows, err := db.Query(`SELECT promotion_name FROM "Promotion" WHERE '` + date + `'  between start_date and end_date `)
+	rows, err := db.Query(`SELECT promotion_name FROM "promotion" WHERE '` + date + `'  between start_date and end_date `)
 	if err != nil {
-		return "fail"
+		return "fail Query ", err
 	}
 	for rows.Next() {
 		if err := rows.Scan(&pro.PromotionName); err != nil {
 			log.Fatal(err)
 		}
 	}
-	return pro.PromotionName
+	return pro.PromotionName, nil
 }
 
 // // Fineinrate ...

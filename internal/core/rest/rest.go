@@ -14,7 +14,11 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 	date := in.CalDate
 	t, _ := time.Parse("2006-01-02", date)
 	caldate := t.Format("2006-01-02")
-	proname := FineProname(caldate)
+	proname, err := FineProname(caldate)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	output := Output{proname, in.AccountNumber}
 	js, err := json.Marshal(output)
 	if err != nil {
