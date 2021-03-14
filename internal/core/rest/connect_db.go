@@ -9,7 +9,11 @@ import (
 )
 
 const (
-	host     = "127.0.0.1"
+	// for test by go run
+	// host = "localhost"
+	// port     = 5432
+	// for test by docker
+	host     = "192.168.89.242"
 	port     = 5503
 	user     = "postgres"
 	password = "postgres"
@@ -17,9 +21,6 @@ const (
 )
 
 var db *sql.DB
-
-// var pro Promotion
-// var rate Rate
 
 func InitDB() {
 	var err error
@@ -32,7 +33,6 @@ func InitDB() {
 	}
 
 	if err = db.Ping(); err != nil {
-		log.Println("\n============== Error db.Ping ====================")
 		log.Panic(err.Error())
 	}
 

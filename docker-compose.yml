@@ -31,14 +31,14 @@ services:
 
     app:
       network_mode: bridge
-        # - shared-network
-        # - bridge
+      # networks:
+      #   - shared-network
       # UTS (hostname): เป็นการ isolate the hostname และ NIS (Network Information Service) name ตามแต่ละ namespaces
-      hostname: "127.0.0.1"
+      hostname: "host"
       # inter-process communication (ipc): เป็นการ isolate SystemV IPC และ POSIX Message Queues ตามแต่ละ namespaces
       ipc: host
       # process id (pid): เป็นการ virtualized pid โดยในแต่ละ namespace จะมี pid ซ้ำกันได้ โดย pid ในแต่ละ namespace จะถูก map เป็น pid ของ host อีกที
-      pid: "127.0.0.1"
+      pid: "host"
       build: 
           context: .
           dockerfile: Dockerfile
