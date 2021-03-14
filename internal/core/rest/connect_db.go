@@ -31,7 +31,6 @@ func InitDB() {
 		log.Panic(err)
 	}
 
-	log.Println("\n============== Error db.Ping ====================", db)
 	if err = db.Ping(); err != nil {
 		log.Println("\n============== Error db.Ping ====================")
 		log.Panic(err.Error())
