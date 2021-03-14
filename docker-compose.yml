@@ -9,9 +9,7 @@ services:
         image: dpage/pgadmin4
         ports:
             - "8081:80"
-        environment:
-            PGADMIN_DEFAULT_EMAIL: user@domain.local
-            PGADMIN_DEFAULT_PASSWORD: SuperSecret
+        env_file: .env
         depends_on:
           - "postgres"
 
@@ -25,19 +23,19 @@ services:
       image: postgres
       container_name: "postgres_container"
       ports:
-          - "5432:5432"
-      environment:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_DB: payment
+          - "5503:5432"
+      env_file: .env
       volumes:
-          - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+          - sql/pg/init.sql:/docker-entrypoint-initdb.d/init.sql
 
     app:
       networks:
         - shared-network
+      # UTS (hostname): เป็นการ isolate the hostname และ NIS (Network Information Service) name ตามแต่ละ namespaces
       hostname: "host"
+      # inter-process communication (ipc): เป็นการ isolate SystemV IPC และ POSIX Message Queues ตามแต่ละ namespaces
       ipc: host
+      # process id (pid): เป็นการ virtualized pid โดยในแต่ละ namespace จะมี pid ซ้ำกันได้ โดย pid ในแต่ละ namespace จะถูก map เป็น pid ของ host อีกที
       pid: "host"
       build: 
           context: .

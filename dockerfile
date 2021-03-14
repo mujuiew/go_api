@@ -1,12 +1,13 @@
-FROM golang:1.11.2-alpine3.8
-WORKDIR /app
+FROM golang:1.15 as builder
+WORKDIR /go/src/app
+ADD . .
+COPY startapp.sh /startapp.sh
+# #BUILD APP
+# RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o ./cmd/ .
+# ENV PORT 8080
 
-COPY go.mod .
-COPY go.sum .
-# RUN go mod download
-RUN CGO_ENABLED=0 GOOS=linux go build -o main ./...
-# RUN go build
-COPY . .
-RUN go test ./.
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
-CMD ["./app"]
+RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o /go/app ./
+RUN chmod 775 /startapp.sh
+ENTRYPOINT /startapp.sh
+
+# CMD ["go", "run", "cmd/main.go"]
